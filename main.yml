@@ -1,0 +1,30 @@
+- hosts: localhost
+  vars:
+    source_key: "./.ssh/id_rsa"
+    dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"
+    personal: "{{ lookup('env', 'HOME') }}/personal"
+  pre_tasks:
+    - name: update apt
+      become: true
+      apt:
+        force_apt_get: true
+        update_cache: true
+        state: present
+      tags:
+        - install
+        - core
+    - name: ansible-galaxy install 
+      become: true
+      ansible.builtin.command: ansible-galaxy install -r requirements.yml
+      tags:
+        - install
+        - core
+  tasks:
+    - include_tasks: tasks/ssh.yml
+    
+    - name: include nix role
+      ansible.builtin.include_role:
+        name: danielrolls.nix
+      vars:
+        nix_commands: 
+          - "nix-shell -p nix-info --command nix-info"
