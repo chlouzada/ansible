@@ -25,6 +25,3 @@
     - name: include nix role
       ansible.builtin.include_role:
         name: danielrolls.nix
-      vars:
-        nix_commands: 
-          - "nix-shell -p nix-info --command nix-info"
