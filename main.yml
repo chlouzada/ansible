@@ -13,7 +13,7 @@
       tags:
         - install
         - core
-    - name: ansible-galaxy install 
+    - name: ansible-galaxy install
       become: true
       ansible.builtin.command: ansible-galaxy install -r requirements.yml
       tags:
@@ -21,7 +21,11 @@
         - core
   tasks:
     - include_tasks: tasks/ssh.yml
-    
+
     - name: include nix role
       ansible.builtin.include_role:
         name: danielrolls.nix
+      vars:
+        flakes: true
+        nix_commands:
+          - "nix-shell -p nix-info --command nix-info"
