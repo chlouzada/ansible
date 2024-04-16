@@ -10,6 +10,7 @@
         force_apt_get: true
         update_cache: true
         state: present
+      ignore_errors: true
       tags:
         - install
         - core
@@ -21,11 +22,11 @@
         - core
   tasks:
     - include_tasks: tasks/ssh.yml
-
     - name: include nix role
       ansible.builtin.include_role:
         name: danielrolls.nix
       vars:
         flakes: true
-        nix_commands:
-          - "nix-shell -p nix-info --command nix-info"
+        # nix_commands:
+        #  - "nix-shell -p nix-info --command nix-info"
+    - include_tasks: tasks/dotfiles.yml
